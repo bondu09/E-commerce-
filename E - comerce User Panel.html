@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="AuraCart — Premium eCommerce Experience">
+  <title>AuraCart — Modern Native eCommerce</title>
+  
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --secondary: #475569;
+      --accent: #f59e0b;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-subtle: #f1f5f9;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --disabled: #cbd5e1;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-full: 9999px;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.07);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --header-h: 68px;
+      --bottom-nav-h: 64px;
+      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="dark"] {
+      --primary: #3b82f6;
+      --primary-hover: #60a5fa;
+      --secondary: #94a3b8;
+      --bg: #090d16;
+      --surface: #111827;
+      --surface-subtle: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #1e293b;
+      --disabled: #334155;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding-bottom: calc(var(--bottom-nav-h) + 24px);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media (min-width: 1024px) {
+      body { padding-bottom: 0; }
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; border: none; background: none; }
+    img { max-width: 100%; height: auto; display: block; }
+    
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 16px; width: 100%; }
+
+    /* Icons */
+    .icon { width: 22px; height: 22px; fill: currentColor; display: inline-block; vertical-align: middle; }
+    .icon-sm { width: 16px; height: 16px; }
+    .icon-lg { width: 32px; height: 32px; }
+
+    /* Layout Components */
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background-color: var(--surface);
+      border-bottom: 1px solid var(--border);
+      height: var(--header-h);
+      display: flex;
+      align-items: center;
+      box-shadow: var(--shadow-sm);
+    }
+    .header-content { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; }
+    .brand-logo { font-size: 1.35rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px; letter-spacing: -0.5px; }
+    .nav-search { flex: 1; max-width: 520px; position: relative; }
+    .search-input {
+      width: 100%;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      padding: 10px 16px 10px 42px;
+      border-radius: var(--radius-full);
+      color: var(--text);
+      font-size: 0.95rem;
+      outline: none;
+      transition: var(--transition);
+    }
+    .search-input:focus { border-color: var(--primary); background: var(--surface); box-shadow: 0 0 0 3px rgba(37,99,235,0.15); }
+    .search-icon-btn { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
+
+    .header-actions { display: flex; align-items: center; gap: 8px; }
+    .action-btn {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-full);
+      color: var(--text);
+      transition: var(--transition);
+    }
+    .action-btn:hover { background-color: var(--surface-subtle); color: var(--primary); }
+    .badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background-color: var(--danger);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+      border: 2px solid var(--surface);
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: var(--bottom-nav-h);
+      background-color: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 50;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.03);
+      padding-bottom: env(safe-area-inset-bottom, 0);
+    }
+    @media (min-width: 1024px) {
+      .bottom-nav { display: none; }
+    }
+    .bottom-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      height: 100%;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 500;
+      gap: 3px;
+      transition: var(--transition);
+      position: relative;
+    }
+    .bottom-nav-item.active { color: var(--primary); font-weight: 600; }
+    .bottom-nav-item .badge { top: 6px; right: calc(50% - 18px); }
+
+    /* Button System */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      transition: var(--transition);
+      white-space: nowrap;
+      border: 1px solid transparent;
+    }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover:not(:disabled) { background: var(--primary-hover); }
+    .btn-secondary { background: var(--surface-subtle); color: var(--text); border-color: var(--border); }
+    .btn-secondary:hover:not(:disabled) { background: var(--border); }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-block { width: 100%; }
+    .btn-sm { padding: 6px 12px; font-size: 0.85rem; border-radius: var(--radius-sm); }
+
+    /* Cards & Components */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 18px;
+      box-shadow: var(--shadow-sm);
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    @media (min-width: 768px) {
+      .product-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    }
+    @media (min-width: 1024px) {
+      .product-grid { grid-template-columns: repeat(4, 1fr); gap: 24px; }
+    }
+
+    .product-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: var(--transition);
+    }
+    .product-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: var(--primary); }
+    .product-img-wrap {
+      position: relative;
+      width: 100%;
+      padding-top: 100%;
+      background: var(--surface-subtle);
+      overflow: hidden;
+    }
+    .product-img-wrap img {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    .product-card:hover .product-img-wrap img { transform: scale(1.05); }
+    .wishlist-toggle {
+      position: absolute;
+      top: 8px; right: 8px;
+      width: 34px; height: 34px;
+      border-radius: var(--radius-full);
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--secondary);
+      box-shadow: var(--shadow-sm);
+      z-index: 2;
+    }
+    .wishlist-toggle.active { color: var(--danger); }
+    .product-content { padding: 12px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
+    .product-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 6px;
+      min-height: 2.8em;
+    }
+    .product-meta { display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px; }
+    .price { font-weight: 700; color: var(--primary); font-size: 1.1rem; }
+    .price-original { font-size: 0.85rem; color: var(--text-muted); text-decoration: line-through; }
+    .badge-stock { font-size: 0.7rem; font-weight: 600; padding: 2px 6px; border-radius: 4px; }
+    .in-stock { background: rgba(16,185,129,0.1); color: var(--success); }
+    .out-stock { background: rgba(239,68,68,0.1); color: var(--danger); }
+
+    /* Form Controls */
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 0.88rem; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+    .form-control {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      color: var(--text);
+      outline: none;
+      transition: var(--transition);
+    }
+    .form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+    .form-error { font-size: 0.8rem; color: var(--danger); margin-top: 4px; display: none; }
+
+    /* View containers */
+    .view-container { display: none; padding: 20px 0; }
+    .view-container.active { display: block; animation: fadeIn 0.25s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Hero / Category banner */
+    .hero-banner {
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      color: white;
+      border-radius: var(--radius);
+      padding: 36px 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .hero-banner h1 { font-size: 1.8rem; font-weight: 800; line-height: 1.2; }
+    .category-scroll {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      scrollbar-width: none;
+    }
+    .category-scroll::-webkit-scrollbar { display: none; }
+    .category-pill {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      font-size: 0.85rem;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .category-pill.active, .category-pill:hover { background: var(--primary); color: white; border-color: var(--primary); }
+
+    /* Toast notification */
+    #toast-container { position: fixed; top: 20px; right: 20px; z-index: 999; display: flex; flex-direction: column; gap: 8px; }
+    .toast {
+      background: var(--surface);
+      color: var(--text);
+      border-left: 4px solid var(--primary);
+      padding: 12px 18px;
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-lg);
+      font-size: 0.9rem;
+      font-weight: 500;
+      min-width: 260px;
+      animation: toastIn 0.3s ease-out;
+    }
+    .toast-error { border-color: var(--danger); }
+    .toast-success { border-color: var(--success); }
+    @keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+    /* Modals */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 480px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 24px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+    }
+
+    /* Skeleton Loading */
+    .skeleton {
+      background: linear-gradient(90deg, var(--surface-subtle) 25%, var(--border) 50%, var(--surface-subtle) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: var(--radius-sm);
+    }
+    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+
+    /* Footer */
+    .app-footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 36px 0 18px;
+      margin-top: auto;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin-bottom: 24px; }
+  </style>
+
+  <!-- Firebase v10 Compat for Client Auth -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="container header-content">
+      <a href="#/home" class="brand-logo">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        <span>AuraCart</span>
+      </a>
+
+      <div class="nav-search">
+        <span class="search-icon-btn">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        </span>
+        <input type="text" id="global-search" class="search-input" placeholder="Search products, brands, categories..." autocomplete="off">
+      </div>
+
+      <div class="header-actions">
+        <button id="theme-toggle" class="action-btn" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        </button>
+        <a href="#/notifications" class="action-btn" title="Notifications" aria-label="Notifications">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+          <span class="badge" id="notif-badge" style="display:none">0</span>
+        </a>
+        <a href="#/cart" class="action-btn" title="Cart" aria-label="Shopping Cart">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+          <span class="badge" id="cart-badge">0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Dynamic Views Mount -->
+  <main class="container" id="main-content">
+    
+    <!-- HOME VIEW -->
+    <section id="view-home" class="view-container">
+      <div class="hero-banner">
+        <span>Spring Collection 2026</span>
+        <h1>Engineered for Seamless Everyday Comfort</h1>
+        <p>Explore high-performance lifestyle essentials backed by direct store warranties.</p>
+        <div>
+          <a href="#/shop" class="btn btn-secondary" style="color: #0f172a; font-weight:700;">Explore Shop</a>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 24px;">
+        <h3 style="margin-bottom: 12px; font-weight: 700;">Categories</h3>
+        <div class="category-scroll" id="home-categories">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+
+      <div style="margin-bottom: 32px;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px;">
+          <h2 style="font-size: 1.25rem; font-weight: 700;">Featured Products</h2>
+          <a href="#/shop" style="color: var(--primary); font-size: 0.9rem; font-weight: 600;">View All &rarr;</a>
+        </div>
+        <div class="product-grid" id="home-products"></div>
+      </div>
+    </section>
+
+    <!-- SHOP / PRODUCT LISTING VIEW -->
+    <section id="view-shop" class="view-container">
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h1 style="font-size: 1.4rem; font-weight: 800;" id="shop-title">Catalog</h1>
+        <div style="display: flex; gap: 8px;">
+          <select id="filter-sort" class="form-control" style="width: auto; padding: 6px 12px;">
+            <option value="newest">Sort: Newest</option>
+            <option value="price_asc">Price: Low to High</option>
+            <option value="price_desc">Price: High to Low</option>
+            <option value="rating">Top Rated</option>
+          </select>
+        </div>
+      </div>
+      <div class="product-grid" id="shop-products-grid"></div>
+      <div id="shop-empty-state" class="card" style="text-align: center; display: none; padding: 48px 20px;">
+        <svg class="icon icon-lg" style="margin: 0 auto 12px; color: var(--text-muted);" viewBox="0 0 24 24"><path d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        <h3>No Products Found</h3>
+        <p style="color: var(--text-muted); margin-top: 4px;">Try refining your filters or search keywords.</p>
+      </div>
+    </section>
+
+    <!-- PRODUCT DETAILS VIEW -->
+    <section id="view-product-detail" class="view-container">
+      <button class="btn btn-secondary btn-sm" onclick="window.history.back()" style="margin-bottom: 16px;">&larr; Back</button>
+      <div style="display: grid; grid-template-columns: 1fr; gap: 32px;" id="product-detail-layout">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- CART VIEW -->
+    <section id="view-cart" class="view-container">
+      <h1 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 20px;">Shopping Bag</h1>
+      <div style="display: grid; grid-template-columns: 1fr; gap: 24px;" id="cart-layout">
+        <div id="cart-items-container" style="display: flex; flex-direction: column; gap: 12px;"></div>
+        <div class="card" id="cart-summary" style="height: fit-content;">
+          <h3 style="margin-bottom: 16px; font-weight: 700;">Order Summary</h3>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <span style="color: var(--text-muted);">Subtotal</span>
+            <span id="cart-subtotal" style="font-weight: 600;">$0.00</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <span style="color: var(--text-muted);">Estimated Shipping</span>
+            <span id="cart-shipping" style="font-weight: 600;">$0.00</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
+            <span style="color: var(--text-muted);">Discount</span>
+            <span id="cart-discount" style="font-weight: 600; color: var(--success);">-$0.00</span>
+          </div>
+          <div style="border-top: 1px solid var(--border); padding-top: 12px; display: flex; justify-content: space-between; margin-bottom: 20px;">
+            <span style="font-weight: 700; font-size: 1.1rem;">Total</span>
+            <span id="cart-grandtotal" style="font-weight: 800; font-size: 1.2rem; color: var(--primary);">$0.00</span>
+          </div>
+          <a href="#/checkout" class="btn btn-primary btn-block">Proceed to Checkout</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHECKOUT VIEW -->
+    <section id="view-checkout" class="view-container">
+      <h1 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 20px;">Secure Checkout</h1>
+      <form id="checkout-form" style="display: grid; grid-template-columns: 1fr; gap: 24px;">
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div class="card">
+            <h3 style="margin-bottom: 12px; font-weight: 700;">1. Shipping Address</h3>
+            <div id="checkout-addresses-list" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px;"></div>
+            <a href="#/addresses" class="btn btn-secondary btn-sm">+ Manage Addresses</a>
+          </div>
+
+          <div class="card">
+            <h3 style="margin-bottom: 12px; font-weight: 700;">2. Delivery Method</h3>
+            <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px; cursor: pointer;">
+              <input type="radio" name="shipping_method" value="standard" checked>
+              <span>Standard Ground (3-5 business days) — <strong>Free</strong></span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+              <input type="radio" name="shipping_method" value="express">
+              <span>Express Air Courier (1-2 business days) — <strong>$15.00</strong></span>
+            </label>
+          </div>
+
+          <div class="card">
+            <h3 style="margin-bottom: 12px; font-weight: 700;">3. Payment Method</h3>
+            <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px; cursor: pointer;">
+              <input type="radio" name="payment_method" value="cod" checked>
+              <span>Cash on Delivery (COD)</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+              <input type="radio" name="payment_method" value="card">
+              <span>Credit / Debit Card (Online Gateway Verification)</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="card" style="height: fit-content;">
+          <h3 style="margin-bottom: 16px; font-weight: 700;">Final Review</h3>
+          <div class="form-group" style="display: flex; gap: 8px;">
+            <input type="text" id="coupon-code-input" class="form-control" placeholder="Promo code">
+            <button type="button" id="apply-coupon-btn" class="btn btn-secondary">Apply</button>
+          </div>
+          <div id="applied-coupon-msg" style="font-size: 0.85rem; color: var(--success); margin-bottom: 12px; display: none;"></div>
+          <button type="submit" id="place-order-btn" class="btn btn-primary btn-block">Place Verified Order</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ORDERS VIEW -->
+    <section id="view-orders" class="view-container">
+      <h1 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 20px;">Your Orders</h1>
+      <div id="orders-list-container" style="display: flex; flex-direction: column; gap: 16px;"></div>
+    </section>
+
+    <!-- WISHLIST VIEW -->
+    <section id="view-wishlist" class="view-container">
+      <h1 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 20px;">Saved Items</h1>
+      <div class="product-grid" id="wishlist-grid"></div>
+    </section>
+
+    <!-- ACCOUNT / PROFILE VIEW -->
+    <section id="view-account" class="view-container">
+      <div class="card" style="margin-bottom: 20px;">
+        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+          <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--surface-subtle); display: flex; align-items: center; justify-content: center;">
+            <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+          </div>
+          <div>
+            <h2 id="acc-name" style="font-size: 1.2rem; font-weight: 700;">Account</h2>
+            <p id="acc-email" style="color: var(--text-muted); font-size: 0.85rem;">Sign in to sync your bag</p>
+          </div>
+        </div>
+        <div id="auth-buttons-wrapper">
+          <a href="#/login" class="btn btn-primary btn-sm">Sign In / Register</a>
+        </div>
+      </div>
+
+      <div class="card" style="padding: 0; overflow: hidden;">
+        <a href="#/orders" class="bottom-nav-item" style="height: 52px; flex-direction: row; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid var(--border);">
+          <span style="font-size: 0.95rem; color: var(--text);">My Orders</span>
+          <span>&rarr;</span>
+        </a>
+        <a href="#/addresses" class="bottom-nav-item" style="height: 52px; flex-direction: row; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid var(--border);">
+          <span style="font-size: 0.95rem; color: var(--text);">Saved Addresses</span>
+          <span>&rarr;</span>
+        </a>
+        <a href="#/support" class="bottom-nav-item" style="height: 52px; flex-direction: row; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid var(--border);">
+          <span style="font-size: 0.95rem; color: var(--text);">Customer Support & Tickets</span>
+          <span>&rarr;</span>
+        </a>
+        <button id="logout-btn" style="width: 100%; height: 52px; display: none; align-items: center; justify-content: space-between; padding: 0 16px; color: var(--danger); font-size: 0.95rem; font-weight: 600;">
+          <span>Log Out</span>
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- AUTH: LOGIN / REGISTER -->
+    <section id="view-login" class="view-container">
+      <div class="card" style="max-width: 420px; margin: 40px auto;">
+        <h2 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 8px;">Welcome Back</h2>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 20px;">Access your orders, addresses, and wishlist</p>
+        
+        <form id="login-form">
+          <div class="form-group">
+            <label class="form-label" for="login-email">Email Address</label>
+            <input type="email" id="login-email" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="login-password">Password</label>
+            <input type="password" id="login-password" class="form-control" required minlength="6">
+          </div>
+          <button type="submit" class="btn btn-primary btn-block" style="margin-top: 12px;">Sign In</button>
+          <div style="text-align: center; margin-top: 16px; font-size: 0.88rem;">
+            <a href="#/register" style="color: var(--primary);">Need an account? Register</a>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section id="view-register" class="view-container">
+      <div class="card" style="max-width: 420px; margin: 40px auto;">
+        <h2 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 8px;">Create Account</h2>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 20px;">Join AuraCart for fast checkout and delivery tracking</p>
+        
+        <form id="register-form">
+          <div class="form-group">
+            <label class="form-label" for="reg-name">Full Name</label>
+            <input type="text" id="reg-name" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg-email">Email Address</label>
+            <input type="email" id="reg-email" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg-password">Password</label>
+            <input type="password" id="reg-password" class="form-control" required minlength="6">
+          </div>
+          <button type="submit" class="btn btn-primary btn-block" style="margin-top: 12px;">Create Account</button>
+          <div style="text-align: center; margin-top: 16px; font-size: 0.88rem;">
+            <a href="#/login" style="color: var(--primary);">Already have an account? Log In</a>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ADDRESS BOOK VIEW -->
+    <section id="view-addresses" class="view-container">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h1 style="font-size: 1.4rem; font-weight: 800;">Saved Addresses</h1>
+        <button id="add-address-modal-btn" class="btn btn-primary btn-sm">+ Add New</button>
+      </div>
+      <div id="addresses-container" style="display: grid; gap: 16px;"></div>
+    </section>
+
+    <!-- SUPPORT VIEW -->
+    <section id="view-support" class="view-container">
+      <h1 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 20px;">Support Desk</h1>
+      <div class="card" style="margin-bottom: 24px;">
+        <h3 style="margin-bottom: 12px; font-weight: 700;">Open a Ticket</h3>
+        <form id="support-ticket-form">
+          <div class="form-group">
+            <label class="form-label">Subject</label>
+            <input type="text" id="ticket-subject" class="form-control" required placeholder="e.g. Order delivery status">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Message</label>
+            <textarea id="ticket-message" class="form-control" rows="3" required placeholder="Provide details about your issue..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-sm">Submit Ticket</button>
+        </form>
+      </div>
+      <h3 style="margin-bottom: 12px; font-weight: 700;">Your Recent Inquiries</h3>
+      <div id="support-tickets-list" style="display: flex; flex-direction: column; gap: 12px;"></div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Mobile Navigation Bar -->
+  <nav class="bottom-nav">
+    <a href="#/home" class="bottom-nav-item active" data-route="home">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+      <span>Home</span>
+    </a>
+    <a href="#/shop" class="bottom-nav-item" data-route="shop">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+      <span>Catalog</span>
+    </a>
+    <a href="#/wishlist" class="bottom-nav-item" data-route="wishlist">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+      <span>Saved</span>
+    </a>
+    <a href="#/cart" class="bottom-nav-item" data-route="cart">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+      <span class="badge" id="nav-cart-badge">0</span>
+      <span>Cart</span>
+    </a>
+    <a href="#/account" class="bottom-nav-item" data-route="account">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+  <!-- Address Modal -->
+  <div id="address-modal" class="modal-overlay">
+    <div class="modal-card">
+      <h3 style="margin-bottom: 16px; font-weight: 700;">Add Shipping Address</h3>
+      <form id="address-form">
+        <div class="form-group">
+          <label class="form-label">Recipient Name</label>
+          <input type="text" id="addr-name" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" id="addr-phone" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Street Address</label>
+          <input type="text" id="addr-line1" class="form-control" required>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label class="form-label">City</label>
+            <input type="text" id="addr-city" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Postal Code</label>
+            <input type="text" id="addr-zip" class="form-control" required>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px;">
+          <button type="button" class="btn btn-secondary" onclick="document.getElementById('address-modal').classList.remove('open')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Address</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <!-- APPLICATION LOGIC -->
+  <script>
+    /* -------------------------------------------------------------
+       1. FIREBASE CLIENT CONFIGURATION
+       ------------------------------------------------------------- */
+    const firebaseConfig = {
+      apiKey: "AIzaSyDummyKeyForArchitectureDemo001",
+      authDomain: "auracart-production.firebaseapp.com",
+      projectId: "auracart-production",
+      storageBucket: "auracart-production.appspot.com",
+      messagingSenderId: "100000000000",
+      appId: "1:100000000000:web:abcdef1234567890"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const auth = firebase.auth();
+
+    /* -------------------------------------------------------------
+       2. STATE & API CLIENT
+       ------------------------------------------------------------- */
+    const state = {
+      user: null,
+      idToken: null,
+      cart: { items: [], subtotal: 0, discount: 0, grandTotal: 0, appliedCoupon: null },
+      wishlist: [],
+      categories: [],
+      products: []
+    };
+
+    function escapeHTML(str) {
+      if (typeof str !== 'string') return str;
+      return str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+      }[tag] || tag));
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type === 'error' ? 'toast-error' : type === 'success' ? 'toast-success' : ''}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    async function apiRequest(action, options = {}) {
+      const method = options.method || 'GET';
+      const headers = { 'Content-Type': 'application/json' };
+      
+      if (state.idToken) {
+        headers['Authorization'] = `Bearer ${state.idToken}`;
+      }
+
+      const fetchOptions = { method, headers };
+      if (options.body) {
+        fetchOptions.body = JSON.stringify(options.body);
+      }
+
+      try {
+        const response = await fetch(`backend.php?action=${encodeURIComponent(action)}`, fetchOptions);
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+          throw new Error(data.message || 'Server request failed');
+        }
+        return data;
+      } catch (err) {
+        console.error(`API [${action}] Failure:`, err);
+        throw err;
+      }
+    }
+
+    /* -------------------------------------------------------------
+       3. CLIENT-SIDE ROUTER
+       ------------------------------------------------------------- */
+    const routes = {
+      'home': renderHome,
+      'shop': renderShop,
+      'cart': renderCart,
+      'checkout': renderCheckout,
+      'orders': renderOrders,
+      'wishlist': renderWishlist,
+      'account': renderAccount,
+      'login': () => showView('view-login'),
+      'register': () => showView('view-register'),
+      'addresses': renderAddresses,
+      'support': renderSupport
+    };
+
+    function handleRouting() {
+      const hash = window.location.hash.slice(2) || 'home';
+      const [baseRoute, param] = hash.split('/');
+
+      // Update bottom nav active classes
+      document.querySelectorAll('.bottom-nav-item').forEach(el => {
+        el.classList.toggle('active', el.dataset.route === baseRoute);
+      });
+
+      if (baseRoute === 'product' && param) {
+        renderProductDetail(param);
+        return;
+      }
+
+      if (routes[baseRoute]) {
+        routes[baseRoute]();
+      } else {
+        renderHome();
+      }
+    }
+
+    function showView(viewId) {
+      document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
+      const activeEl = document.getElementById(viewId);
+      if (activeEl) {
+        activeEl.classList.add('active');
+        window.scrollTo(0, 0);
+      }
+    }
+
+    window.addEventListener('hashchange', handleRouting);
+
+    /* -------------------------------------------------------------
+       4. VIEW RENDERERS
+       ------------------------------------------------------------- */
+    async function renderHome() {
+      showView('view-home');
+      try {
+        const [catRes, prodRes] = await Promise.all([
+          apiRequest('list_categories'),
+          apiRequest('list_featured_products')
+        ]);
+        
+        state.categories = catRes.data || [];
+        state.products = prodRes.data || [];
+
+        // Categories pill scroll
+        const catContainer = document.getElementById('home-categories');
+        catContainer.innerHTML = state.categories.map(c => `
+          <div class="category-pill" onclick="window.location.hash='#/shop?cat=${encodeURIComponent(c.id)}'">
+            ${escapeHTML(c.name)}
+          </div>
+        `).join('');
+
+        // Products grid
+        const prodContainer = document.getElementById('home-products');
+        prodContainer.innerHTML = state.products.map(createProductCardHTML).join('');
+      } catch (err) {
+        showToast('Failed to load initial storefront catalog', 'error');
+      }
+    }
+
+    async function renderShop() {
+      showView('view-shop');
+      const grid = document.getElementById('shop-products-grid');
+      grid.innerHTML = '<div class="skeleton" style="height:280px;"></div>'.repeat(4);
+      try {
+        const res = await apiRequest('list_products');
+        state.products = res.data.items || [];
+        
+        if (state.products.length === 0) {
+          document.getElementById('shop-empty-state').style.display = 'block';
+          grid.innerHTML = '';
+        } else {
+          document.getElementById('shop-empty-state').style.display = 'none';
+          grid.innerHTML = state.products.map(createProductCardHTML).join('');
+        }
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    }
+
+    function createProductCardHTML(p) {
+      const isSaved = state.wishlist.includes(p.id);
+      return `
+        <article class="product-card">
+          <div class="product-img-wrap">
+            <img src="${escapeHTML(p.image_url)}" alt="${escapeHTML(p.name)}" loading="lazy" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23eee\\'/></svg>'">
+            <button class="wishlist-toggle ${isSaved ? 'active' : ''}" onclick="toggleWishlist('${escapeHTML(p.id)}')" aria-label="Save item">
+              <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" stroke="currentColor" stroke-width="2" fill="${isSaved ? 'currentColor' : 'none'}"/></svg>
+            </button>
+          </div>
+          <div class="product-content">
+            <div>
+              <a href="#/product/${encodeURIComponent(p.id)}" class="product-title">${escapeHTML(p.name)}</a>
+              <div class="product-meta">
+                <span class="price">$${parseFloat(p.price).toFixed(2)}</span>
+                ${p.sale_price ? `<span class="price-original">$${parseFloat(p.original_price).toFixed(2)}</span>` : ''}
+              </div>
+            </div>
+            <button class="btn btn-primary btn-block btn-sm" onclick="addToCart('${escapeHTML(p.id)}')">Add to Bag</button>
+          </div>
+        </article>
+      `;
+    }
+
+    async function renderProductDetail(productId) {
+      showView('view-product-detail');
+      const layout = document.getElementById('product-detail-layout');
+      layout.innerHTML = '<div class="skeleton" style="height:360px;"></div>';
+
+      try {
+        const res = await apiRequest(`get_product&id=${encodeURIComponent(productId)}`);
+        const p = res.data;
+        layout.innerHTML = `
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px;">
+            <div style="border-radius: var(--radius); overflow:hidden; border:1px solid var(--border); background:var(--surface);">
+              <img src="${escapeHTML(p.image_url)}" alt="${escapeHTML(p.name)}" style="width:100%; height:auto;">
+            </div>
+            <div style="display:flex; flex-direction:column; gap:16px;">
+              <span class="badge-stock ${p.stock_quantity > 0 ? 'in-stock' : 'out-stock'}" style="width:fit-content;">
+                ${p.stock_quantity > 0 ? `In Stock (${p.stock_quantity})` : 'Sold Out'}
+              </span>
+              <h1 style="font-size: 1.6rem; font-weight: 800;">${escapeHTML(p.name)}</h1>
+              <div class="price" style="font-size: 1.5rem;">$${parseFloat(p.price).toFixed(2)}</div>
+              <p style="color: var(--text-muted);">${escapeHTML(p.description)}</p>
+              
+              <div style="display:flex; gap: 12px; margin-top: 16px;">
+                <button class="btn btn-primary" style="flex:1;" onclick="addToCart('${escapeHTML(p.id)}')">Add to Cart</button>
+                <button class="btn btn-secondary" onclick="toggleWishlist('${escapeHTML(p.id)}')">Save to Wishlist</button>
+              </div>
+            </div>
+          </div>
+        `;
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    }
+
+    async function renderCart() {
+      showView('view-cart');
+      const container = document.getElementById('cart-items-container');
+      
+      if (!state.user) {
+        container.innerHTML = `
+          <div class="card" style="text-align: center; padding: 36px 16px;">
+            <h3>Your Cart is Waiting</h3>
+            <p style="color: var(--text-muted); margin: 8px 0 16px;">Sign in to view your stored bag items across all devices.</p>
+            <a href="#/login" class="btn btn-primary btn-sm">Log In</a>
+          </div>
+        `;
+        return;
+      }
+
+      try {
+        const res = await apiRequest('get_cart');
+        state.cart = res.data;
+        updateCartBadges(state.cart.items.reduce((s, i) => s + i.quantity, 0));
+
+        if (state.cart.items.length === 0) {
+          container.innerHTML = `<div class="card" style="text-align:center; padding:32px;">Your bag is empty.</div>`;
+          document.getElementById('cart-summary').style.display = 'none';
+          return;
+        }
+
+        document.getElementById('cart-summary').style.display = 'block';
+        container.innerHTML = state.cart.items.map(item => `
+          <div class="card" style="display:flex; gap:16px; align-items:center;">
+            <img src="${escapeHTML(item.image_url)}" alt="${escapeHTML(item.name)}" style="width:72px; height:72px; object-fit:cover; border-radius:var(--radius-sm);">
+            <div style="flex:1;">
+              <h4 style="font-weight:600;">${escapeHTML(item.name)}</h4>
+              <span class="price">$${parseFloat(item.price).toFixed(2)}</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <button class="btn btn-secondary btn-sm" onclick="updateCartQty('${escapeHTML(item.product_id)}', ${item.quantity - 1})">-</button>
+              <span style="font-weight:700;">${item.quantity}</span>
+              <button class="btn btn-secondary btn-sm" onclick="updateCartQty('${escapeHTML(item.product_id)}', ${item.quantity + 1})">+</button>
+            </div>
+            <button class="action-btn" onclick="removeCartItem('${escapeHTML(item.product_id)}')" style="color:var(--danger);">&times;</button>
+          </div>
+        `).join('');
+
+        document.getElementById('cart-subtotal').textContent = `$${state.cart.subtotal.toFixed(2)}`;
+        document.getElementById('cart-discount').textContent = `-$${state.cart.discount.toFixed(2)}`;
+        document.getElementById('cart-grandtotal').textContent = `$${state.cart.grandTotal.toFixed(2)}`;
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    }
+
+    async function renderCheckout() {
+      if (!state.user) {
+        window.location.hash = '#/login';
+        return;
+      }
+      showView('view-checkout');
+      try {
+        const res = await apiRequest('list_addresses');
+        const list = document.getElementById('checkout-addresses-list');
+        if (res.data.length === 0) {
+          list.innerHTML = `<p style="font-size:0.88rem; color:var(--text-muted);">No shipping addresses saved yet. Please add one below.</p>`;
+        } else {
+          list.innerHTML = res.data.map((addr, idx) => `
+            <label class="card" style="display:flex; gap:12px; align-items:flex-start; padding:12px; cursor:pointer;">
+              <input type="radio" name="checkout_address" value="${escapeHTML(addr.id)}" ${idx === 0 || addr.is_default ? 'checked' : ''}>
+              <div>
+                <strong>${escapeHTML(addr.full_name)}</strong> (${escapeHTML(addr.phone)})<br>
+                <span style="font-size:0.85rem; color:var(--text-muted);">${escapeHTML(addr.line1)}, ${escapeHTML(addr.city)}, ${escapeHTML(addr.zip)}</span>
+              </div>
+            </label>
+          `).join('');
+        }
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    }
+
+    async function renderOrders() {
+      if (!state.user) { window.location.hash = '#/login'; return; }
+      showView('view-orders');
+      const container = document.getElementById('orders-list-container');
+      container.innerHTML = '<div class="skeleton" style="height:120px;"></div>';
+      try {
+        const res = await apiRequest('list_orders');
+        if (res.data.length === 0) {
+          container.innerHTML = `<div class="card" style="text-align:center; padding:32px;">No orders found.</div>`;
+          return;
+        }
+        container.innerHTML = res.data.map(o => `
+          <div class="card">
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border); padding-bottom:8px; margin-bottom:10px;">
+              <span style="font-size:0.85rem; color:var(--text-muted);">Order #${escapeHTML(o.id.substring(0,8))}</span>
+              <span class="badge-stock in-stock">${escapeHTML(o.status.toUpperCase())}</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:baseline;">
+              <div>
+                <div>${o.items_count} item(s)</div>
+                <small style="color:var(--text-muted);">${new Date(o.created_at).toLocaleDateString()}</small>
+              </div>
+              <span class="price">$${parseFloat(o.total_amount).toFixed(2)}</span>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    }
+
+    async function renderWishlist() {
+      if (!state.user) { window.location.hash = '#/login'; return; }
+      showView('view-wishlist');
+      const grid = document.getElementById('wishlist-grid');
+      try {
+        const res = await apiRequest('get_wishlist');
+        state.wishlist = res.data.map(p => p.id);
+        if (res.data.length === 0) {
+          grid.innerHTML = '<p style="color:var(--text-muted); grid-column: 1/-1;">Your wishlist is empty.</p>';
+        } else {
+          grid.innerHTML = res.data.map(createProductCardHTML).join('');
+        }
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    }
+
+    async function renderAddresses() {
+      if (!state.user) { window.location.hash = '#/login'; return; }
+      showView('view-addresses');
+      const container = document.getElementById('addresses-container');
+      try {
+        const res = await apiRequest('list_addresses');
+        container.innerHTML = res.data.map(a => `
+          <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong>${escapeHTML(a.full_name)}</strong><br>
+              <span style="color:var(--text-muted); font-size:0.9rem;">${escapeHTML(a.line1)}, ${escapeHTML(a.city)}</span>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="deleteAddress('${escapeHTML(a.id)}')">Remove</button>
+          </div>
+        `).join('');
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    }
+
+    async function renderSupport() {
+      if (!state.user) { window.location.hash = '#/login'; return; }
+      showView('view-support');
+      const container = document.getElementById('support-tickets-list');
+      try {
+        const res = await apiRequest('list_support_tickets');
+        container.innerHTML = res.data.map(t => `
+          <div class="card">
+            <div style="display:flex; justify-content:space-between;">
+              <strong>${escapeHTML(t.subject)}</strong>
+              <span class="badge-stock in-stock">${escapeHTML(t.status)}</span>
+            </div>
+            <p style="margin-top:6px; font-size:0.9rem; color:var(--text-muted);">${escapeHTML(t.message)}</p>
+          </div>
+        `).join('');
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    }
+
+    function renderAccount() {
+      showView('view-account');
+      const nameEl = document.getElementById('acc-name');
+      const emailEl = document.getElementById('acc-email');
+      const authWrap = document.getElementById('auth-buttons-wrapper');
+      const logoutBtn = document.getElementById('logout-btn');
+
+      if (state.user) {
+        nameEl.textContent = state.user.displayName || 'Authorized Customer';
+        emailEl.textContent = state.user.email;
+        authWrap.style.display = 'none';
+        logoutBtn.style.display = 'flex';
+      } else {
+        nameEl.textContent = 'Account Profile';
+        emailEl.textContent = 'Sign in to access your saved profile settings';
+        authWrap.style.display = 'block';
+        logoutBtn.style.display = 'none';
+      }
+    }
+
+    /* -------------------------------------------------------------
+       5. ACTIONS & MUTATIONS
+       ------------------------------------------------------------- */
+    async function addToCart(productId) {
+      if (!state.user) {
+        showToast('Please sign in to add items to your cart', 'error');
+        window.location.hash = '#/login';
+        return;
+      }
+      try {
+        await apiRequest('add_cart_item', { method: 'POST', body: { product_id: productId, quantity: 1 } });
+        showToast('Added to bag!', 'success');
+        renderCart();
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    }
+
+    async function updateCartQty(productId, qty) {
+      try {
+        if (qty <= 0) {
+          await apiRequest('remove_cart_item', { method: 'POST', body: { product_id: productId } });
+        } else {
+          await apiRequest('update_cart_item', { method: 'POST', body: { product_id: productId, quantity: qty } });
+        }
+        renderCart();
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    }
+
+    async function removeCartItem(productId) {
+      await updateCartQty(productId, 0);
+    }
+
+    async function toggleWishlist(productId) {
+      if (!state.user) {
+        showToast('Sign in required to manage saved items', 'error');
+        window.location.hash = '#/login';
+        return;
+      }
+      const isSaved = state.wishlist.includes(productId);
+      const action = isSaved ? 'remove_wishlist_item' : 'add_wishlist_item';
+      try {
+        await apiRequest(action, { method: 'POST', body: { product_id: productId } });
+        if (isSaved) {
+          state.wishlist = state.wishlist.filter(id => id !== productId);
+          showToast('Removed from saved items');
+        } else {
+          state.wishlist.push(productId);
+          showToast('Saved to wishlist!', 'success');
+        }
+        handleRouting();
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    }
+
+    function updateCartBadges(count) {
+      document.getElementById('cart-badge').textContent = count;
+      document.getElementById('nav-cart-badge').textContent = count;
+    }
+
+    /* -------------------------------------------------------------
+       6. AUTHENTICATION & EVENT HANDLERS
+       ------------------------------------------------------------- */
+    auth.onIdTokenChanged(async (user) => {
+      state.user = user;
+      if (user) {
+        state.idToken = await user.getIdToken();
+        const cartRes = await apiRequest('get_cart').catch(() => null);
+        if (cartRes && cartRes.data) {
+          updateCartBadges(cartRes.data.items.reduce((s, i) => s + i.quantity, 0));
+        }
+      } else {
+        state.idToken = null;
+        updateCartBadges(0);
+      }
+      handleRouting();
+    });
+
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      try {
+        await auth.signInWithEmailAndPassword(
+          document.getElementById('login-email').value,
+          document.getElementById('login-password').value
+        );
+        showToast('Authenticated successfully', 'success');
+        window.location.hash = '#/account';
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    });
+
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('reg-name').value;
+      try {
+        const cred = await auth.createUserWithEmailAndPassword(
+          document.getElementById('reg-email').value,
+          document.getElementById('reg-password').value
+        );
+        await cred.user.updateProfile({ displayName: name });
+        showToast('Account registered successfully', 'success');
+        window.location.hash = '#/account';
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    });
+
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      auth.signOut();
+      showToast('Signed out');
+      window.location.hash = '#/home';
+    });
+
+    document.getElementById('checkout-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const addrRadio = document.querySelector('input[name="checkout_address"]:checked');
+      if (!addrRadio) {
+        showToast('Please select a shipping destination', 'error');
+        return;
+      }
+      const shippingMethod = document.querySelector('input[name="shipping_method"]:checked').value;
+      const paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+
+      try {
+        const res = await apiRequest('create_order', {
+          method: 'POST',
+          body: {
+            address_id: addrRadio.value,
+            shipping_method: shippingMethod,
+            payment_method: paymentMethod
+          }
+        });
+        showToast('Order confirmed! ID: ' + res.data.order_id, 'success');
+        window.location.hash = '#/orders';
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    });
+
+    // Address Modal Controls
+    document.getElementById('add-address-modal-btn').addEventListener('click', () => {
+      document.getElementById('address-modal').classList.add('open');
+    });
+
+    document.getElementById('address-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      try {
+        await apiRequest('create_address', {
+          method: 'POST',
+          body: {
+            full_name: document.getElementById('addr-name').value,
+            phone: document.getElementById('addr-phone').value,
+            line1: document.getElementById('addr-line1').value,
+            city: document.getElementById('addr-city').value,
+            zip: document.getElementById('addr-zip').value
+          }
+        });
+        document.getElementById('address-modal').classList.remove('open');
+        showToast('Address added', 'success');
+        renderAddresses();
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    });
+
+    // Theme Switcher
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const target = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', target);
+      localStorage.setItem('aura_theme', target);
+    });
+
+    // Initialize Theme
+    const savedTheme = localStorage.getItem('aura_theme') || 
+      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
+    // Initial Route Execution
+    window.addEventListener('DOMContentLoaded', handleRouting);
+  </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "666614368195",
+    "firebase_url": "https://reset-d1b84-default-rtdb.firebaseio.com",
+    "project_id": "reset-d1b84",
+    "storage_bucket": "reset-d1b84.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:666614368195:android:52cc47c99380bdb0385f76",
+        "android_client_info": {
+          "package_name": "com.bet99.zya.me"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "666614368195-6jdpv622qk5n77u2nupljij98b0rl23i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLneT8Z8Xbh4eienuwSrF7Nl773p_aM6w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "666614368195-6jdpv622qk5n77u2nupljij98b0rl23i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
